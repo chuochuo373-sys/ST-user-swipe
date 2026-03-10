@@ -1,0 +1,42 @@
+/* 用户消息滑动控件 - 极简可见版 */
+.user-swipe-left,
+.user-swipe-right {
+    position: absolute;
+    bottom: 5px;
+    font-size: 20px;
+    color: var(--SmartThemeBodyColor, #ccc);
+    opacity: 0.6;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    /* 强制清除任何可能隐藏元素的样式 */
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    pointer-events: auto;
+    transition: opacity 0.2s;
+}
+
+.user-swipe-left:hover,
+.user-swipe-right:hover {
+    opacity: 1;
+}
+
+.user-swipe-left {
+    left: 5px;
+}
+
+.user-swipe-right {
+    right: 5px;
+}
+
+/* 确保消息容器允许绝对定位 */
+.mes {
+    position: relative !important;
+    overflow: visible !important;
+}
