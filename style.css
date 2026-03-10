@@ -1,11 +1,36 @@
-.mes { position: relative !important; overflow: visible !important; }
-.swipe_left[data-user-swipe],
-.swipeRightBlock[data-user-swipe] { position: absolute; z-index: 1000; pointer-events: auto; }
-.swipe_left[data-user-swipe] { left: 5px; bottom: 5px; }
-.swipeRightBlock[data-user-swipe] { right: 5px; bottom: 5px; display: flex; flex-direction: column; align-items: center; }
+/* 用户消息箭头基础定位 - 在JS注入的样式基础上补充 */
+.mes {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+/* 后备样式：如果JS未能提取样式，至少让箭头可见（字体图标） */
 .swipe_left[data-user-swipe]:not([style*="background-image"]),
 .swipe_right[data-user-swipe]:not([style*="background-image"]) {
-    font-size: 20px !important; color: var(--SmartThemeBodyColor, #ccc) !important;
-    background: none !important; width: 30px !important; height: 30px !important;
-    display: flex !important; align-items: center !important; justify-content: center !important;
+    font-size: 20px !important;
+    color: var(--SmartThemeBodyColor, #ccc) !important;
+    background: none !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+.swipe_left[data-user-swipe]:not([style*="background-image"]) {
+    left: 5px !important;
+    bottom: 5px !important;
+    position: absolute !important;
+}
+
+.swipeRightBlock[data-user-swipe]:not([style*="background-image"]) {
+    right: 5px !important;
+    bottom: 5px !important;
+    position: absolute !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+.swipes-counter[data-user-swipe]:not([style*="color"]) {
+    font-size: 12px !important;
+    color: var(--SmartThemeBodyColor, #ccc) !important;
+    margin-top: 2px !important;
 }
