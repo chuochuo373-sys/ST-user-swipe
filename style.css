@@ -1,15 +1,14 @@
-/* 用户消息滑动控件 - 基础定位与后备样式 */
+/* 基础定位，确保用户消息箭头可见 */
 .mes {
     position: relative !important;
     overflow: visible !important;
 }
 
-/* 确保所有用户消息箭头绝对定位且在最上层 */
 [data-user-swipe].swipe_left,
 [data-user-swipe].swipeRightBlock {
     position: absolute !important;
     bottom: 5px !important;
-    z-index: 1000 !important;
+    z-index: 100 !important;
     pointer-events: auto !important;
 }
 
@@ -24,7 +23,7 @@
     align-items: center !important;
 }
 
-/* 如果克隆样式失败（未设置背景图），使用字体图标作为后备 */
+/* 如果未成功克隆样式，使用后备字体图标 */
 [data-user-swipe].swipe_left:not([style*="background-image"]),
 [data-user-swipe].swipe_right:not([style*="background-image"]) {
     font-size: 20px !important;
@@ -34,15 +33,7 @@
     height: auto !important;
 }
 
-/* 计数器后备样式 */
 [data-user-swipe].swipes-counter {
     font-size: 12px !important;
     color: var(--SmartThemeBodyColor, #ccc) !important;
-    line-height: 1 !important;
-    margin-top: 2px !important;
-}
-
-/* 确保右箭头在容器内正常显示 */
-[data-user-swipe].swipe_right {
-    display: block !important;
 }
