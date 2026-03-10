@@ -1,0 +1,11 @@
+{
+    "display_name": "User Swipe",
+    "loading_order": 10,
+    "requires": [],
+    "optional": [],
+    "js": "index.js",
+    "css": "style.css",
+    "author": "YourName",
+    "version": "1.0.0",
+    "homePage": ""
+}
