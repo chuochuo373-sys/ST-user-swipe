@@ -1,42 +1,42 @@
-/* 用户消息滑动控件 - 后备可见性 + 完美适配主题 */
+/* 用户消息滑动控件 - 极简可见版 */
+.user-swipe-left,
+.user-swipe-right {
+    position: absolute;
+    bottom: 5px;
+    font-size: 20px;
+    color: var(--SmartThemeBodyColor, #ccc);
+    opacity: 0.6;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    /* 强制清除任何可能隐藏元素的样式 */
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    pointer-events: auto;
+    transition: opacity 0.2s;
+}
+
+.user-swipe-left:hover,
+.user-swipe-right:hover {
+    opacity: 1;
+}
+
+.user-swipe-left {
+    left: 5px;
+}
+
+.user-swipe-right {
+    right: 5px;
+}
+
+/* 确保消息容器允许绝对定位 */
 .mes {
     position: relative !important;
     overflow: visible !important;
 }
-
-/* 箭头基础定位 - 会被主题样式覆盖，但确保可见 */
-.swipe_left[data-user-swipe],
-.swipe_right[data-user-swipe] {
-    position: absolute;
-    bottom: 5px;
-    z-index: 10;
-    cursor: pointer;
-    /* 后备尺寸和颜色，主题会覆盖这些 */
-    width: 28px;
-    height: 28px;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--SmartThemeBodyColor, #ccc);
-    background: none;
-    border: none;
-    pointer-events: auto;
-    transition: opacity 0.2s;
-    opacity: 0.7;
-}
-
-.swipe_left[data-user-swipe]:hover,
-.swipe_right[data-user-swipe]:hover {
-    opacity: 1;
-}
-
-.swipe_left[data-user-swipe] {
-    left: 5px;
-}
-
-.swipe_right[data-user-swipe] {
-    right: 5px;
-}
-
-/* 如果主题设置了背景图替换，font-size会被设为0，后备颜色不会干扰 */
