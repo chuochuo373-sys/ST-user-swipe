@@ -1,17 +1,16 @@
-/* 用户消息滑动控件 */
+/* 用户消息滑动控件 - 左下角 */
 .user-swipe-controls {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    bottom: 5px;
+    left: 5px;
     display: flex;
     gap: 4px;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 12px;
     padding: 2px 6px;
     z-index: 100;
     color: white;
     font-size: 12px;
-    line-height: 1;
     backdrop-filter: blur(4px);
     border: 1px solid rgba(255,255,255,0.2);
 }
@@ -25,40 +24,16 @@
     justify-content: center;
 }
 
-.user-swipe-controls span.disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
-.user-swipe-controls .user-swipe-counter {
-    cursor: default;
-    font-weight: bold;
-    min-width: 30px;
-    text-align: center;
-}
-
-.user-swipe-controls .user-swipe-add {
-    color: #4caf50;
-}
-
-.user-swipe-controls .user-swipe-arrow:hover:not(.disabled),
-.user-swipe-controls .user-swipe-add:hover {
+.user-swipe-controls span:hover {
     opacity: 0.8;
     background: rgba(255,255,255,0.1);
     border-radius: 4px;
 }
 
-/* 弹出窗口样式 */
-.user-swipe-popup {
-    text-align: center;
-}
-.user-swipe-popup textarea {
-    margin-top: 10px;
-    background: #2a2a2a;
-    color: #eee;
-    border: 1px solid #555;
-    border-radius: 8px;
-    padding: 8px;
-    resize: vertical;
+/* 移动端优化 */
+@media (max-width: 768px) {
+    .user-swipe-controls {
+        font-size: 14px; /* 稍大一点方便点击 */
+        padding: 4px 8px;
+    }
 }
