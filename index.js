@@ -1,14 +1,8 @@
-// User Swipe Plugin - 简洁版，完美模拟 AI 滑动
+// User Swipe Plugin - 使用原生AI消息箭头类名
 (function() {
     'use strict';
     const PLUGIN_NAME = 'user-swipe';
     console.log(`[${PLUGIN_NAME}] 加载中...`);
-
-    // 加载样式
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = `extensions/${PLUGIN_NAME}/style.css`;
-    document.head.appendChild(link);
 
     // 获取 SillyTavern 上下文
     function getContext() {
@@ -49,7 +43,6 @@
     // 触发编辑（模拟双击消息）
     function triggerEdit(element) {
         if (!element) return;
-        // 双击消息是 SillyTavern 默认的编辑方式
         element.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
     }
 
@@ -65,34 +58,32 @@
         return null;
     }
 
-    // 为消息添加滑动控件
+    // 为消息添加滑动控件（完全模仿AI消息箭头）
     function addSwipeControls(message, element) {
         if (!message || !element || !message.is_user) return;
-        if (element.querySelector('.user-swipe-controls')) return;
+        // 避免重复添加
+        if (element.querySelector('.swipe_left.user-swipe')) return;
 
         ensureUserSwipeData(message);
 
-        const controls = document.createElement('div');
-        controls.className = 'user-swipe-controls';
-
-        // 左箭头
+        // 左箭头 - 使用AI消息的类名 .swipe_left
         const leftArrow = document.createElement('span');
-        leftArrow.className = 'user-swipe-arrow user-swipe-left fa-solid fa-chevron-left';
+        leftArrow.className = 'swipe_left user-swipe fa-solid fa-chevron-left interactable';
         leftArrow.title = '上一个版本';
 
-        // 右箭头
+        // 右箭头 - 使用AI消息的类名 .swipe_right
         const rightArrow = document.createElement('span');
-        rightArrow.className = 'user-swipe-arrow user-swipe-right fa-solid fa-chevron-right';
+        rightArrow.className = 'swipe_right user-swipe fa-solid fa-chevron-right interactable';
         rightArrow.title = '新建版本';
 
-        controls.appendChild(leftArrow);
-        controls.appendChild(rightArrow);
-        element.appendChild(controls);
+        // 添加到消息元素中
+        element.appendChild(leftArrow);
+        element.appendChild(rightArrow);
 
         // 更新左箭头显示状态
         function updateLeftArrow() {
             const count = message.user_swipes.versions.length;
-            leftArrow.style.display = count > 1 ? 'inline-flex' : 'none';
+            leftArrow.style.display = count > 1 ? 'inline-block' : 'none';
         }
         updateLeftArrow();
 
@@ -101,7 +92,7 @@
             const swipes = message.user_swipes;
             const total = swipes.versions.length;
             if (total === 0) return;
-            newIndex = (newIndex + total) % total; // 循环
+            newIndex = (newIndex + total) % total;
             swipes.currentIndex = newIndex;
             updateMessageContent(message, element, swipes.versions[newIndex]);
             updateLeftArrow();
@@ -121,9 +112,9 @@
             e.stopPropagation();
             if (confirm('是否创建新版本？')) {
                 const swipes = message.user_swipes;
-                swipes.versions.push(''); // 添加空版本
-                setVersion(swipes.versions.length - 1); // 切换到新版本
-                triggerEdit(element); // 立即打开编辑
+                swipes.versions.push('');
+                setVersion(swipes.versions.length - 1);
+                triggerEdit(element);
             }
         });
     }
@@ -143,23 +134,17 @@
         const chat = document.getElementById('chat');
         if (!chat) return;
 
-        const observer = new MutationObserver((mutations) => {
-            for (const mutation of mutations) {
-                if (mutation.addedNodes.length > 0) {
-                    setTimeout(scanUserMessages, 50); // 延迟确保元素已渲染
-                }
-            }
+        const observer = new MutationObserver(() => {
+            setTimeout(scanUserMessages, 50);
         });
         observer.observe(chat, { childList: true, subtree: true });
     }
 
     // 初始化
     function init() {
-        setTimeout(scanUserMessages, 500); // 初始扫描
+        setTimeout(scanUserMessages, 500);
         observeNewMessages();
-
-        // 额外轮询确保所有消息都被覆盖（保险）
-        setInterval(scanUserMessages, 2000);
+        setInterval(scanUserMessages, 2000); // 保险轮询
         console.log(`[${PLUGIN_NAME}] 初始化完成`);
     }
 

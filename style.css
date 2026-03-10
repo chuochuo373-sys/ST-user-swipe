@@ -1,51 +1,38 @@
-/* 用户消息滑动控件 - 完全模仿AI消息样式 */
-.user-swipe-left,
-.user-swipe-right {
+/* 用户消息滑动控件 - 仅添加必要样式，其余由主题控制 */
+.user-swipe.swipe_left,
+.user-swipe.swipe_right {
+    /* 不设置任何具体样式，完全依赖主题对 .swipe_left/.swipe_right 的样式定义 */
+    /* 但确保它们位于消息底部两端，因为主题可能没有为它们定义定位，所以我们添加基础定位 */
     position: absolute;
     bottom: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    background-color: var(--SmartThemeBotMesBlurTintColor, rgba(128, 128, 128, 0.5));
-    color: var(--SmartThemeBodyColor, #fff);
-    border-radius: 50%;
-    font-size: 16px;
-    cursor: pointer;
     z-index: 10;
-    opacity: 0.9;
-    transition: background-color 0.2s, opacity 0.2s;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    pointer-events: auto;
+    cursor: pointer;
+    /* 如果主题有特殊样式，会覆盖这些 */
 }
 
-.user-swipe-left {
+.user-swipe.swipe_left {
     left: 5px;
 }
 
-.user-swipe-right {
+.user-swipe.swipe_right {
     right: 5px;
 }
 
-.user-swipe-left:hover,
-.user-swipe-right:hover {
-    background-color: var(--SmartThemeUserMesBlurTintColor, rgba(200, 200, 200, 0.7));
-    opacity: 1;
-}
-
-/* 移动端优化：稍微增大点击区域 */
-@media (max-width: 768px) {
-    .user-swipe-left,
-    .user-swipe-right {
-        width: 38px;
-        height: 38px;
-        font-size: 18px;
-    }
-}
-
-/* 确保箭头在消息内且不被遮挡 */
+/* 确保消息容器允许绝对定位 */
 .mes {
-    position: relative;
+    position: relative !important;
     overflow: visible !important;
+}
+
+/* 如果主题没有定义箭头图标颜色，提供一个默认 */
+.user-swipe.swipe_left,
+.user-swipe.swipe_right {
+    color: var(--SmartThemeBodyColor, #ccc);
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.user-swipe.swipe_left:hover,
+.user-swipe.swipe_right:hover {
+    opacity: 1;
 }
