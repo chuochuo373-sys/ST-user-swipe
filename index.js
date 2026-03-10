@@ -1,4 +1,4 @@
-// User Swipe Plugin - 最终完美版
+// User Swipe Plugin - 完整版，包含计数器，右箭头智能行为
 (function() {
     'use strict';
     const PLUGIN_NAME = 'user-swipe';
@@ -13,135 +13,65 @@
         }
     }
 
-    // 存储AI消息箭头样式
-    let arrowStyles = null;
+    // 存储从AI消息复制来的样式
+    let leftArrowStyle = null;
+    let rightArrowStyle = null;
+    let counterStyle = null;
 
-    // 提取AI消息箭头样式并注入CSS
-    function extractAndInjectStyles() {
+    // 获取AI消息箭头的计算样式
+    function fetchAISwipeStyles() {
         const aiMes = document.querySelector('.mes[is_user="false"]');
         if (!aiMes) return false;
 
-        const leftArrow = aiMes.querySelector('.swipe_left');
-        const rightArrow = aiMes.querySelector('.swipe_right');
-        const rightContainer = aiMes.querySelector('.swipeRightBlock');
+        const left = aiMes.querySelector('.swipe_left');
+        const right = aiMes.querySelector('.swipe_right');
         const counter = aiMes.querySelector('.swipes-counter');
 
-        if (!leftArrow || !rightArrow || !rightContainer) return false;
-
-        // 获取计算样式
-        const leftStyle = window.getComputedStyle(leftArrow);
-        const rightStyle = window.getComputedStyle(rightArrow);
-        const containerStyle = window.getComputedStyle(rightContainer);
-        const counterStyle = counter ? window.getComputedStyle(counter) : null;
-
-        // 构建CSS规则
-        const cssRules = [];
-
-        // 左箭头
-        cssRules.push(`
-            .mes[is_user="true"] .swipe_left[data-user-swipe] {
-                position: absolute !important;
-                left: 5px !important;
-                bottom: 5px !important;
-                z-index: 1000 !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                cursor: pointer !important;
-                width: ${leftStyle.width} !important;
-                height: ${leftStyle.height} !important;
-                background: ${leftStyle.background} !important;
-                background-image: ${leftStyle.backgroundImage} !important;
-                background-size: ${leftStyle.backgroundSize} !important;
-                background-repeat: ${leftStyle.backgroundRepeat} !important;
-                background-position: ${leftStyle.backgroundPosition} !important;
-                font-size: 0 !important; /* 隐藏字体图标 */
-                color: transparent !important;
-                opacity: ${leftStyle.opacity} !important;
-                filter: ${leftStyle.filter} !important;
-                transform: none !important;
-                -webkit-transform: none !important;
-                pointer-events: auto !important;
-            }
-        `);
-
-        // 右箭头容器
-        cssRules.push(`
-            .mes[is_user="true"] .swipeRightBlock[data-user-swipe] {
-                position: absolute !important;
-                right: 5px !important;
-                bottom: 5px !important;
-                z-index: 1000 !important;
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                justify-content: center !important;
-                cursor: default !important;
-                width: ${containerStyle.width} !important;
-                height: ${containerStyle.height} !important;
-                background: ${containerStyle.background} !important;
-                opacity: ${containerStyle.opacity} !important;
-                filter: ${containerStyle.filter} !important;
-                transform: none !important;
-                -webkit-transform: none !important;
-                pointer-events: none !important; /* 容器不接收点击，箭头接收 */
-            }
-        `);
-
-        // 右箭头
-        cssRules.push(`
-            .mes[is_user="true"] .swipe_right[data-user-swipe] {
-                display: block !important;
-                cursor: pointer !important;
-                width: ${rightStyle.width} !important;
-                height: ${rightStyle.height} !important;
-                background: ${rightStyle.background} !important;
-                background-image: ${rightStyle.backgroundImage} !important;
-                background-size: ${rightStyle.backgroundSize} !important;
-                background-repeat: ${rightStyle.backgroundRepeat} !important;
-                background-position: ${rightStyle.backgroundPosition} !important;
-                font-size: 0 !important;
-                color: transparent !important;
-                opacity: ${rightStyle.opacity} !important;
-                filter: ${rightStyle.filter} !important;
-                transform: none !important;
-                -webkit-transform: none !important;
-                pointer-events: auto !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                border: none !important;
-                box-shadow: none !important;
-            }
-        `);
-
-        // 计数器
-        if (counterStyle) {
-            cssRules.push(`
-                .mes[is_user="true"] .swipes-counter[data-user-swipe] {
-                    display: block !important;
-                    font-size: ${counterStyle.fontSize} !important;
-                    color: ${counterStyle.color} !important;
-                    font-weight: ${counterStyle.fontWeight} !important;
-                    line-height: ${counterStyle.lineHeight} !important;
-                    margin: ${counterStyle.margin} !important;
-                    padding: ${counterStyle.padding} !important;
-                    opacity: ${counterStyle.opacity} !important;
-                    filter: ${counterStyle.filter} !important;
-                    pointer-events: none !important;
-                    background: none !important;
-                    border: none !important;
-                    box-shadow: none !important;
-                }
-            `);
+        if (left) {
+            const style = window.getComputedStyle(left);
+            leftArrowStyle = {
+                backgroundImage: style.backgroundImage,
+                width: style.width,
+                height: style.height,
+                backgroundSize: style.backgroundSize,
+                backgroundRepeat: style.backgroundRepeat,
+                backgroundPosition: style.backgroundPosition,
+                margin: style.margin,
+                padding: style.padding,
+                // 不复制定位属性，我们会自己定位
+            };
+            console.log(`[${PLUGIN_NAME}] 获取到左箭头样式`);
         }
 
-        // 注入CSS
-        const style = document.createElement('style');
-        style.id = 'user-swipe-styles';
-        style.textContent = cssRules.join('\n');
-        document.head.appendChild(style);
+        if (right) {
+            const style = window.getComputedStyle(right);
+            rightArrowStyle = {
+                backgroundImage: style.backgroundImage,
+                width: style.width,
+                height: style.height,
+                backgroundSize: style.backgroundSize,
+                backgroundRepeat: style.backgroundRepeat,
+                backgroundPosition: style.backgroundPosition,
+                margin: style.margin,
+                padding: style.padding,
+            };
+            console.log(`[${PLUGIN_NAME}] 获取到右箭头样式`);
+        }
 
-        console.log(`[${PLUGIN_NAME}] 样式注入成功`);
+        if (counter) {
+            const style = window.getComputedStyle(counter);
+            counterStyle = {
+                color: style.color,
+                fontSize: style.fontSize,
+                fontWeight: style.fontWeight,
+                fontFamily: style.fontFamily,
+                margin: style.margin,
+                padding: style.padding,
+                // 其他文本样式
+            };
+            console.log(`[${PLUGIN_NAME}] 获取到计数器样式`);
+        }
+
         return true;
     }
 
@@ -195,6 +125,11 @@
         if (!message || !element || !message.is_user) return;
         if (element.querySelector('.swipe_left[data-user-swipe]')) return;
 
+        // 如果没有获取到AI样式，尝试重新获取
+        if (!leftArrowStyle && !rightArrowStyle) {
+            fetchAISwipeStyles();
+        }
+
         ensureUserSwipeData(message);
 
         // 左箭头
@@ -203,7 +138,7 @@
         leftArrow.setAttribute('data-user-swipe', 'true');
         leftArrow.title = '上一个版本';
 
-        // 右箭头容器
+        // 右箭头容器（模仿AI消息结构）
         const rightContainer = document.createElement('div');
         rightContainer.className = 'swipeRightBlock flex-container flexFlow';
         rightContainer.setAttribute('data-user-swipe', 'true');
@@ -211,7 +146,7 @@
         const rightArrow = document.createElement('span');
         rightArrow.className = 'swipe_right fa-solid fa-chevron-right interactable';
         rightArrow.setAttribute('data-user-swipe', 'true');
-        rightArrow.title = '新建/下一个版本';
+        rightArrow.title = '新建版本';
 
         const counter = document.createElement('span');
         counter.className = 'swipes-counter';
@@ -222,50 +157,103 @@
         element.appendChild(leftArrow);
         element.appendChild(rightContainer);
 
-        // 初始化显示
-        const swipes = message.user_swipes;
-        const updateUI = () => {
-            const total = swipes.versions.length;
-            const idx = swipes.currentIndex;
-            leftArrow.style.display = total > 1 ? 'flex' : 'none';
+        // 应用从AI消息复制来的样式
+        if (leftArrowStyle) {
+            Object.assign(leftArrow.style, {
+                backgroundImage: leftArrowStyle.backgroundImage,
+                width: leftArrowStyle.width,
+                height: leftArrowStyle.height,
+                backgroundSize: leftArrowStyle.backgroundSize,
+                backgroundRepeat: leftArrowStyle.backgroundRepeat,
+                backgroundPosition: leftArrowStyle.backgroundPosition,
+                margin: leftArrowStyle.margin,
+                padding: leftArrowStyle.padding,
+                fontSize: '0', // 隐藏字体图标
+                color: 'transparent',
+            });
+        }
+
+        if (rightArrowStyle) {
+            Object.assign(rightArrow.style, {
+                backgroundImage: rightArrowStyle.backgroundImage,
+                width: rightArrowStyle.width,
+                height: rightArrowStyle.height,
+                backgroundSize: rightArrowStyle.backgroundSize,
+                backgroundRepeat: rightArrowStyle.backgroundRepeat,
+                backgroundPosition: rightArrowStyle.backgroundPosition,
+                margin: rightArrowStyle.margin,
+                padding: rightArrowStyle.padding,
+                fontSize: '0',
+                color: 'transparent',
+            });
+        }
+
+        if (counterStyle) {
+            Object.assign(counter.style, {
+                color: counterStyle.color,
+                fontSize: counterStyle.fontSize,
+                fontWeight: counterStyle.fontWeight,
+                fontFamily: counterStyle.fontFamily,
+                margin: counterStyle.margin,
+                padding: counterStyle.padding,
+            });
+        }
+
+        // 更新UI函数
+        function updateLeftArrow() {
+            const count = message.user_swipes.versions.length;
+            leftArrow.style.display = count > 1 ? 'flex' : 'none';
+        }
+
+        function updateCounter() {
+            const idx = message.user_swipes.currentIndex;
+            const total = message.user_swipes.versions.length;
             counter.textContent = `${idx + 1}/${total}`;
-        };
-        updateUI();
+        }
+
+        // 初始化显示
+        updateLeftArrow();
+        updateCounter();
 
         // 切换版本（循环）
-        const setVersion = (newIndex) => {
+        function setVersion(newIndex) {
+            const swipes = message.user_swipes;
             const total = swipes.versions.length;
             if (total === 0) return;
             newIndex = (newIndex + total) % total;
             swipes.currentIndex = newIndex;
             updateMessageContent(message, element, swipes.versions[newIndex]);
-            updateUI();
+            updateLeftArrow();
+            updateCounter();
 
             const context = getContext();
             if (context?.saveChat) context.saveChat();
-        };
+        }
 
         // 左箭头点击
         leftArrow.addEventListener('click', (e) => {
             e.stopPropagation();
-            setVersion(swipes.currentIndex - 1);
+            setVersion(message.user_swipes.currentIndex - 1);
         });
 
-        // 右箭头点击
+        // 右箭头点击：智能行为
         rightArrow.addEventListener('click', (e) => {
             e.stopPropagation();
+            const swipes = message.user_swipes;
+            const currentIdx = swipes.currentIndex;
             const total = swipes.versions.length;
-            const idx = swipes.currentIndex;
-            if (idx < total - 1) {
-                // 有下一个版本，直接切换
-                setVersion(idx + 1);
-            } else {
-                // 已经是最后一个版本，询问创建新版本
-                if (confirm('是否创建新版本？')) {
-                    swipes.versions.push('');
-                    setVersion(swipes.versions.length - 1);
-                    triggerEdit(element);
-                }
+
+            // 如果不是最后一个版本，切换到下一个
+            if (currentIdx < total - 1) {
+                setVersion(currentIdx + 1);
+                return;
+            }
+
+            // 是最后一个版本，询问是否创建新版本
+            if (confirm('是否创建新版本？')) {
+                swipes.versions.push('');
+                setVersion(swipes.versions.length - 1); // 切换到新版本
+                triggerEdit(element); // 立即打开编辑
             }
         });
     }
@@ -291,17 +279,17 @@
         observer.observe(chat, { childList: true, subtree: true });
     }
 
-    // 初始化：先提取样式，然后扫描消息
+    // 初始化：先尝试获取AI样式，再开始扫描
     function init() {
-        // 尝试多次提取样式（等待AI消息加载）
+        // 尝试多次获取AI样式，直到成功或超时
         let attempts = 0;
         const interval = setInterval(() => {
-            if (extractAndInjectStyles() || attempts++ > 20) {
+            if (fetchAISwipeStyles() || attempts++ > 20) {
                 clearInterval(interval);
                 setTimeout(scanUserMessages, 500);
                 observeNewMessages();
                 setInterval(scanUserMessages, 2000);
-                console.log(`[${PLUGIN_NAME}] 初始化完成`);
+                console.log(`[${PLUGIN_NAME}] 初始化完成，样式获取状态: 左${!!leftArrowStyle} 右${!!rightArrowStyle} 计数器${!!counterStyle}`);
             }
         }, 500);
     }
