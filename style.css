@@ -1,42 +1,41 @@
-/* 用户消息滑动控件 - 极简可见版 */
-.user-swipe-left,
-.user-swipe-right {
-    position: absolute;
-    bottom: 5px;
-    font-size: 20px;
-    color: var(--SmartThemeBodyColor, #ccc);
-    opacity: 0.6;
-    cursor: pointer;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    /* 强制清除任何可能隐藏元素的样式 */
-    background: none !important;
-    border: none !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
-    pointer-events: auto;
-    transition: opacity 0.2s;
-}
-
-.user-swipe-left:hover,
-.user-swipe-right:hover {
-    opacity: 1;
-}
-
-.user-swipe-left {
-    left: 5px;
-}
-
-.user-swipe-right {
-    right: 5px;
-}
-
-/* 确保消息容器允许绝对定位 */
+/* 用户消息箭头 - 基础定位，确保可见 */
 .mes {
     position: relative !important;
     overflow: visible !important;
+}
+
+.swipe_left[data-user-swipe],
+.swipeRightBlock[data-user-swipe] {
+    position: absolute;
+    z-index: 1000;
+    pointer-events: auto;
+}
+
+.swipe_left[data-user-swipe] {
+    left: 5px;
+    bottom: 5px;
+}
+
+.swipeRightBlock[data-user-swipe] {
+    right: 5px;
+    bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.swipes-counter[data-user-swipe] {
+    font-size: 12px;
+    color: var(--SmartThemeBodyColor, #ccc);
+    margin-top: 2px;
+}
+
+/* 如果主题未提供箭头样式，使用后备字体图标 */
+.swipe_left[data-user-swipe]:not([style*="background-image"]),
+.swipe_right[data-user-swipe]:not([style*="background-image"]) {
+    font-size: 20px !important;
+    color: var(--SmartThemeBodyColor, #ccc) !important;
+    background: none !important;
+    width: auto !important;
+    height: auto !important;
 }
