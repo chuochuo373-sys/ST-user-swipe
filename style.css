@@ -1,43 +1,48 @@
-/* 用户消息箭头和计数器的基础定位，确保可见 */
+/* 用户消息滑动控件 - 基础定位与后备样式 */
 .mes {
     position: relative !important;
     overflow: visible !important;
 }
 
-/* 左箭头定位 */
-.swipe_left[data-user-swipe] {
-    position: absolute;
-    left: 5px;
-    bottom: 5px;
-    z-index: 1000;
-    pointer-events: auto;
+/* 确保所有用户消息箭头绝对定位且在最上层 */
+[data-user-swipe].swipe_left,
+[data-user-swipe].swipeRightBlock {
+    position: absolute !important;
+    bottom: 5px !important;
+    z-index: 1000 !important;
+    pointer-events: auto !important;
 }
 
-/* 右箭头容器定位 */
-.swipeRightBlock[data-user-swipe] {
-    position: absolute;
-    right: 5px;
-    bottom: 5px;
-    z-index: 1000;
-    pointer-events: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+[data-user-swipe].swipe_left {
+    left: 5px !important;
 }
 
-/* 如果主题未提供箭头样式，使用后备字体图标 */
-.swipe_left[data-user-swipe]:not([style*="background-image"]),
-.swipe_right[data-user-swipe]:not([style*="background-image"]) {
+[data-user-swipe].swipeRightBlock {
+    right: 5px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+/* 如果克隆样式失败（未设置背景图），使用字体图标作为后备 */
+[data-user-swipe].swipe_left:not([style*="background-image"]),
+[data-user-swipe].swipe_right:not([style*="background-image"]) {
     font-size: 20px !important;
     color: var(--SmartThemeBodyColor, #ccc) !important;
     background: none !important;
     width: auto !important;
     height: auto !important;
-    display: inline-block;
 }
 
 /* 计数器后备样式 */
-.swipes-counter[data-user-swipe]:not([style*="color"]) {
+[data-user-swipe].swipes-counter {
     font-size: 12px !important;
     color: var(--SmartThemeBodyColor, #ccc) !important;
+    line-height: 1 !important;
+    margin-top: 2px !important;
+}
+
+/* 确保右箭头在容器内正常显示 */
+[data-user-swipe].swipe_right {
+    display: block !important;
 }
