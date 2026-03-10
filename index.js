@@ -1,4 +1,4 @@
-// User Swipe Plugin - 使用原生AI消息箭头类名
+// User Swipe Plugin - 使用原生AI消息箭头类名 + 后备可见性
 (function() {
     'use strict';
     const PLUGIN_NAME = 'user-swipe';
@@ -62,18 +62,20 @@
     function addSwipeControls(message, element) {
         if (!message || !element || !message.is_user) return;
         // 避免重复添加
-        if (element.querySelector('.swipe_left.user-swipe')) return;
+        if (element.querySelector('.swipe_left[data-user-swipe]')) return;
 
         ensureUserSwipeData(message);
 
-        // 左箭头 - 使用AI消息的类名 .swipe_left
+        // 左箭头 - 使用AI消息的类名 .swipe_left，添加自定义属性标识
         const leftArrow = document.createElement('span');
-        leftArrow.className = 'swipe_left user-swipe fa-solid fa-chevron-left interactable';
+        leftArrow.className = 'swipe_left fa-solid fa-chevron-left interactable';
+        leftArrow.setAttribute('data-user-swipe', 'true');
         leftArrow.title = '上一个版本';
 
         // 右箭头 - 使用AI消息的类名 .swipe_right
         const rightArrow = document.createElement('span');
-        rightArrow.className = 'swipe_right user-swipe fa-solid fa-chevron-right interactable';
+        rightArrow.className = 'swipe_right fa-solid fa-chevron-right interactable';
+        rightArrow.setAttribute('data-user-swipe', 'true');
         rightArrow.title = '新建版本';
 
         // 添加到消息元素中
@@ -83,7 +85,7 @@
         // 更新左箭头显示状态
         function updateLeftArrow() {
             const count = message.user_swipes.versions.length;
-            leftArrow.style.display = count > 1 ? 'inline-block' : 'none';
+            leftArrow.style.display = count > 1 ? 'flex' : 'none';
         }
         updateLeftArrow();
 

@@ -1,38 +1,42 @@
-/* 用户消息滑动控件 - 仅添加必要样式，其余由主题控制 */
-.user-swipe.swipe_left,
-.user-swipe.swipe_right {
-    /* 不设置任何具体样式，完全依赖主题对 .swipe_left/.swipe_right 的样式定义 */
-    /* 但确保它们位于消息底部两端，因为主题可能没有为它们定义定位，所以我们添加基础定位 */
-    position: absolute;
-    bottom: 5px;
-    z-index: 10;
-    cursor: pointer;
-    /* 如果主题有特殊样式，会覆盖这些 */
-}
-
-.user-swipe.swipe_left {
-    left: 5px;
-}
-
-.user-swipe.swipe_right {
-    right: 5px;
-}
-
-/* 确保消息容器允许绝对定位 */
+/* 用户消息滑动控件 - 后备可见性 + 完美适配主题 */
 .mes {
     position: relative !important;
     overflow: visible !important;
 }
 
-/* 如果主题没有定义箭头图标颜色，提供一个默认 */
-.user-swipe.swipe_left,
-.user-swipe.swipe_right {
+/* 箭头基础定位 - 会被主题样式覆盖，但确保可见 */
+.swipe_left[data-user-swipe],
+.swipe_right[data-user-swipe] {
+    position: absolute;
+    bottom: 5px;
+    z-index: 10;
+    cursor: pointer;
+    /* 后备尺寸和颜色，主题会覆盖这些 */
+    width: 28px;
+    height: 28px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--SmartThemeBodyColor, #ccc);
-    opacity: 0.7;
+    background: none;
+    border: none;
+    pointer-events: auto;
     transition: opacity 0.2s;
+    opacity: 0.7;
 }
 
-.user-swipe.swipe_left:hover,
-.user-swipe.swipe_right:hover {
+.swipe_left[data-user-swipe]:hover,
+.swipe_right[data-user-swipe]:hover {
     opacity: 1;
 }
+
+.swipe_left[data-user-swipe] {
+    left: 5px;
+}
+
+.swipe_right[data-user-swipe] {
+    right: 5px;
+}
+
+/* 如果主题设置了背景图替换，font-size会被设为0，后备颜色不会干扰 */
